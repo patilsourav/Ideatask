@@ -4,78 +4,149 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Idea Task2</title>
-  <STYle>
-    body{
-      background-color: rgb(105, 188, 244);
-      font-family: Arial;
-      color:rgba(255, 255, 255, 0.637);
-      display:flex;
-      justify-content: center; 
-      align-items: center; 
+  <style>
+    body {
+      background-color: #69bcf4;
+      font-family: 'Arial', sans-serif;
+      color: rgba(255, 255, 255, 0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
       height: 100vh;
+      margin: 0;
     }
-    .card{
-      font-family:sans-serif ;
-      background-color: rgba(15, 67, 144, 0.979);
-      border: 2px ;
-      border-radius: 5px;
-      border-width: 2px;
+    .card {
+      background-color: rgba(15, 67, 144, 0.95);
+      border: 2px solid #0f4390;
+      border-radius: 10px;
       text-align: center;
-      width: 350px;
-      align-self: center;
-      padding: 20px;
-
+      width: 400px;
+      padding: 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
-    *P{
-      color: whitesmoke;
+    h1 {
+      color: #fff;
+      margin-bottom: 20px;
     }
-    button{
-        background-color: rgba(63, 166, 56, 0.814);
-        color: snow;
-        padding-left: 5px;
-        border-radius: 2px;
-        border: 0px;
+    p {
+      color: #fff;
     }
-    .myTask{
+    button {
+      background-color: #3fa638;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #358c2e;
+    }
+    .myTask {
       border: 2px solid rgba(18, 116, 207, 0.637);
       text-align: center;
       margin-top: 20px;
-      margin-left: 30px;
-      margin-right: 30px;
       height: 300px;
       border-radius: 5px;
-      
+      overflow-y: auto;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
     }
-    .taskName{
-      background-color: rgb(40, 166, 230);
-      
+    .taskName {
+      background-color: #28a6e6;
       margin-right: 7px;
-      border: 0px;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      color: #fff;
     }
-    input::placeholder{
-      color: rgba(36, 36, 127, 0.293);
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
     }
-    .checkBox{
-      text-align: left;
-      padding-left: 20px;
+    .checkBox {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      margin-bottom: 10px;
+      word-wrap: break-word;
     }
-  </STYle>
+    .checkBox .left-side {
+      display: flex;
+      align-items: center;
+    }
+    .checkBox span {
+      color: #fff;
+      margin-left: 10px; /* Add margin to move the text right from the checkbox */
+      max-width: 200px; /* Limiting the width of the text to keep the button aligned */
+      word-wrap: break-word;
+    }
+    .remove-btn {
+      background-color: #ff4d4d;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .remove-btn:hover {
+      background-color: #e60000;
+    }
+  </style>
 </head>
 <body>
   <div class="card">
     <h1>MY TODO LIST</h1>
-    <input type="text" class="taskName" placeholder="Enter your text"><button class="button">Add</button><br>
-    <div class="myTask"><br><strong><u>My Tasks</u></strong><br><br>
-  <div class="checkBox">
-    <input type="checkbox">Buy Tomatoes <br>
-    <input type="checkbox">Pick kids from school <br>
-    <input type="checkbox">Wash dishes <br>
-  </div>
-    
-    
-    
+    <input type="text" class="taskName" placeholder="Enter your text">
+    <button class="button" onclick="addTask()">Add</button><br>
+    <div class="myTask" id="taskContainer"><br><strong><u>My Tasks</u></strong><br>
+      
     </div>
-    <p><center>Completed :0 | Uncompleted :0</center></p>
+    <p><center>Completed: <span id="completedCount">0</span> | Uncompleted: <span id="uncompletedCount">0</span></center></p>
   </div>
+  <script>
+    function addTask() {
+      const taskInput = document.querySelector('.taskName');
+      const taskContainer = document.getElementById('taskContainer');
+      if (taskInput.value.trim() !== "") {
+        const newTask = document.createElement('div');
+        newTask.classList.add('checkBox');
+        newTask.innerHTML = '<div class="left-side"><input type="checkbox" onchange="updateTaskCount()">' + '<span>' + taskInput.value + '</span></div>' +'<button class="remove-btn" onclick="removeTask(this)">Remove</button>';
+        taskContainer.appendChild(newTask);
+        taskInput.value = "";
+        updateTaskCount();
+      }
+    }
+
+    function removeTask(button) {
+      const task = button.parentElement;
+      task.remove();
+      updateTaskCount();
+    }
+
+    function updateTaskCount() {
+      const tasks = document.querySelectorAll('.checkBox input[type="checkbox"]');
+      let completedCount = 0;
+      let uncompletedCount = 0;
+
+      tasks.forEach(task => {
+        if (task.checked) {
+          completedCount++;
+        } else {
+          uncompletedCount++;
+        }
+      });
+
+      document.getElementById('completedCount').innerText = completedCount;
+      document.getElementById('uncompletedCount').innerText = uncompletedCount;
+    }
+
+    // Initialize task count on page load
+    updateTaskCount();
+  </script>
 </body>
 </html>
