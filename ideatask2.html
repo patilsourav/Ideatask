@@ -1,152 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
   <title>Idea Task2</title>
-  <style>
-    body {
-      background-color: #69bcf4;
-      font-family: 'Arial', sans-serif;
-      color: rgba(255, 255, 255, 0.85);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .card {
-      background-color: rgba(15, 67, 144, 0.95);
-      border: 2px solid #0f4390;
-      border-radius: 10px;
-      text-align: center;
-      width: 400px;
-      padding: 30px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    h1 {
-      color: #fff;
-      margin-bottom: 20px;
-    }
-    p {
-      color: #fff;
-    }
-    button {
-      background-color: #3fa638;
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 5px;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #358c2e;
-    }
-    .myTask {
-      border: 2px solid rgba(18, 116, 207, 0.637);
-      text-align: center;
-      margin-top: 20px;
-      height: 300px;
-      border-radius: 5px;
-      overflow-y: auto;
-      padding: 10px;
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-    .taskName {
-      background-color: #28a6e6;
-      margin-right: 7px;
-      border: none;
-      padding: 10px;
-      border-radius: 5px;
-      color: #fff;
-    }
-    input::placeholder {
-      color: rgba(255, 255, 255, 0.7);
-    }
-    .checkBox {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      background-color: rgba(255, 255, 255, 0.2);
-      border-radius: 5px;
-      margin-bottom: 10px;
-      word-wrap: break-word;
-    }
-    .checkBox .left-side {
-      display: flex;
-      align-items: center;
-    }
-    .checkBox span {
-      color: #fff;
-      margin-left: 10px; /* Add margin to move the text right from the checkbox */
-      max-width: 200px; /* Limiting the width of the text to keep the button aligned */
-      word-wrap: break-word;
-    }
-    .remove-btn {
-      background-color: #ff4d4d;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .remove-btn:hover {
-      background-color: #e60000;
-    }
-  </style>
 </head>
-<body>
-  <div class="card">
-    <h1>MY TODO LIST</h1>
-    <input type="text" class="taskName" placeholder="Enter your text">
-    <button class="button" onclick="addTask()">Add</button><br>
-    <div class="myTask" id="taskContainer"><br><strong><u>My Tasks</u></strong><br>
+
+<body class="bg-[#69bcf4] font-sans text-white/85 flex justify-center items-center h-screen m-0">
+  <div class="bg-[rgba(15,67,144,0.95)] border-2 border-[#0f4390] rounded-lg text-center w-[400px] p-8 shadow-md">
+    <h1 class="text-2xl mb-4">MY TODO LIST</h1>
+
+    <div class="flex justify-center items-center mb-4">
       
+      <input type="text" class="taskName bg-[#28a6e6] mr-2 border-none p-2.5 rounded-md text-white placeholder-white/70"
+        placeholder="Enter your text">
+      <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700 transition ease-in-out duration-300"
+        onclick="addTask()">Add</button>
     </div>
-    <p><center>Completed: <span id="completedCount">0</span> | Uncompleted: <span id="uncompletedCount">0</span></center></p>
+
+    <div class="myTask" id="taskContainer">
+      <strong><u>My Tasks</u></strong>
+    </div>
+
+    <p class="mt-4">
+      <center>Completed: <span id="completedCount">0</span> | Uncompleted: <span id="uncompletedCount">0</span></center>
+    </p>
   </div>
+
   <script>
     function addTask() {
-      const taskInput = document.querySelector('.taskName');
-      const taskContainer = document.getElementById('taskContainer');
-      if (taskInput.value.trim() !== "") {
-        const newTask = document.createElement('div');
-        newTask.classList.add('checkBox');
-        newTask.innerHTML = '<div class="left-side"><input type="checkbox" onchange="updateTaskCount()">' + '<span>' + taskInput.value + '</span></div>' +'<button class="remove-btn" onclick="removeTask(this)">Remove</button>';
-        taskContainer.appendChild(newTask);
-        taskInput.value = "";
-        updateTaskCount();
-      }
-    }
+  const taskInput = document.querySelector('.taskName');
+  const taskContainer = document.getElementById('taskContainer');
+  
+  if (taskInput.value.trim() !== "") {
+    const newTask = document.createElement('div');
+    newTask.classList.add('checkBox', 'flex', 'justify-between', 'items-center', 'p-2.5', 'bg-white/20', 'rounded-md', 'mb-2', 'break-words');
 
-    function removeTask(button) {
-      const task = button.parentElement;
-      task.remove();
+    // Create task content (checkbox + task text)
+    newTask.innerHTML = `
+      <div class="left-side flex items-center">
+        <input type="checkbox" onchange="updateTaskCount()">
+        <span class="ml-2 max-w-[200px] break-words text-white">${taskInput.value}</span>
+      </div>
+    `;
+
+    // Create the remove button and add it to newTask
+    const removeButton = document.createElement('button');
+    removeButton.classList.add('bg-red-500', 'text-white', 'border-none', 'rounded-md', 'px-2', 'py-1', 'cursor-pointer', 'transition', 'ease-in-out', 'duration-300', 'hover:bg-red-700');
+    removeButton.textContent = 'Remove';
+
+    // Add the event listener for removing the task
+    removeButton.addEventListener('click', function() {
+      newTask.remove();
       updateTaskCount();
-    }
+    });
 
-    function updateTaskCount() {
-      const tasks = document.querySelectorAll('.checkBox input[type="checkbox"]');
-      let completedCount = 0;
-      let uncompletedCount = 0;
+    // Append the button to the new task
+    newTask.appendChild(removeButton);
+    taskContainer.appendChild(newTask);
 
-      tasks.forEach(task => {
-        if (task.checked) {
-          completedCount++;
-        } else {
-          uncompletedCount++;
-        }
-      });
-
-      document.getElementById('completedCount').innerText = completedCount;
-      document.getElementById('uncompletedCount').innerText = uncompletedCount;
-    }
-
-    // Initialize task count on page load
+    // Clear the input
+    taskInput.value = "";
     updateTaskCount();
+  }
+}
+
+function updateTaskCount() {
+  const tasks = document.querySelectorAll('.checkBox input[type="checkbox"]');
+  let completedCount = 0;
+  let uncompletedCount = 0;
+
+  tasks.forEach(task => {
+    if (task.checked) {
+      completedCount++;
+    } else {
+      uncompletedCount++;
+    }
+  });
+
+  document.getElementById('completedCount').innerText = completedCount;
+  document.getElementById('uncompletedCount').innerText = uncompletedCount;
+}
+
+// Initialize task count on page load
+updateTaskCount();
+
   </script>
 </body>
+
 </html>
